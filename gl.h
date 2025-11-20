@@ -41,11 +41,45 @@ struct VECTOR3
 {
     VECTOR3() : VECTOR3(0, 0, 0) {}
     VECTOR3(const GLFix x, const GLFix y, const GLFix z)
-        : x(x), y(y), z(z) {}
+            : x(x), y(y), z(z) {}
 
     void print() const { printf("(%d %d %d)\n", x.toInteger<int>(), y.toInteger<int>(), z.toInteger<int>()); }
 
     GLFix x, y, z;
+
+    VECTOR3& operator+=(const VECTOR3& other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return *this;
+    }
+
+    VECTOR3& operator-=(const VECTOR3& other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return *this;
+    }
+
+    VECTOR3 operator+(const VECTOR3& other) const {
+        return { x + other.x, y + other.y, z + other.z };
+    }
+
+    VECTOR3 operator-(const VECTOR3& other) const {
+        return { x - other.x, y - other.y, z - other.z };
+    }
+
+    VECTOR3 operator*(GLFix scalar) const {
+        return { x * scalar, y * scalar, z * scalar };
+    }
+
+    VECTOR3& operator*=(GLFix scalar) {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return *this;
+    }
+
 };
 
 struct VERTEX
