@@ -5,9 +5,11 @@
 #ifdef _TINSPIRE
 #include <libndls.h>
 #else
+#ifndef NGL_NO_SDL
 #include <SDL/SDL.h>
 #include <assert.h>
 #include <signal.h>
+#endif
 static SDL_Surface *scr;
 #endif
 
@@ -58,13 +60,14 @@ void nglInit()
             lcd_init(SCR_320x240_16);
         }
         else
-            lcd_init(SCR_320x240_565);
-    #else
+    #endif
+    #ifndef NGL_NO_SDL
         SDL_Init(SDL_INIT_VIDEO);
         scr = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 16, SDL_SWSURFACE);
         signal(SIGINT, SIG_DFL);
         assert(scr);
     #endif
+
 
     matrix_stack_left = MATRIX_STACK_SIZE;
 }
@@ -230,14 +233,17 @@ void nglDisplay()
 
             lcd_blit(screen_inverted, SCR_320x240_16);
         }
+    #endif
+    #ifndef NGL_NO_SDL
         else
-            lcd_blit(screen, SCR_320x240_565);
-    #else
-        SDL_LockSurface(scr);
-        std::copy(screen, screen + SCREEN_HEIGHT*SCREEN_WIDTH, reinterpret_cast<COLOR*>(scr->pixels));
+            SDL_LockSurface(scr);
+            std::copy(screen, screen + SCREEN_HEIGHT*SCREEN_WIDTH, reinterpret_cast<COLOR*>(scr->pixels));
+            SDL_UnlockSurface(scr);
+            SDL_UpdateRect(scr, 0, 0, 0, 0);
         SDL_UnlockSurface(scr);
         SDL_UpdateRect(scr, 0, 0, 0, 0);
     #endif
+
 
     #ifdef FPS_COUNTER
         static unsigned int frames = 0;
