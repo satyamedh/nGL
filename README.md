@@ -19,3 +19,7 @@ Used in crafti, the winner of 2014's ticalc.org POTY contest! ![crafti!](http://
 Tutorial
 --------
 You can find a tutorial in the Tutorial subfolder.
+
+License
+-------
+nGL is released under the GNU General Public License version 3, see LICENSE.
